@@ -175,12 +175,12 @@ struct ContentView: View {
 			
 			if word.highlighted {
 				// Bold and red for bold words
-				attributedWord.font = .boldSystemFont(ofSize: fontSize)
-				attributedWord.foregroundColor = .red
+				attributedWord.font = .systemFont(ofSize: fontSize, weight: .heavy)
+				//attributedWord.foregroundColor = .red
 			} else {
 				// Normal weight and black for non-bold words
-				attributedWord.font = .systemFont(ofSize: fontSize)
-				attributedWord.foregroundColor = colorScheme == .light ? .black : .white
+				attributedWord.font = .systemFont(ofSize: fontSize, weight: .regular)
+				//attributedWord.foregroundColor = colorScheme == .light ? .black : .white
 			}
 			
 			//attributedWord.font = word.bold ?
@@ -188,7 +188,7 @@ struct ContentView: View {
 			//		.systemFont(ofSize: fontSize)
 			
 			// Set text color to black
-			//attributedWord.foregroundColor = colorScheme == .light ? .black : .white
+			attributedWord.foregroundColor = colorScheme == .light ? .black : .white
 			
 			// Apply underline
 			//attributedWord.underlineStyle = .single
