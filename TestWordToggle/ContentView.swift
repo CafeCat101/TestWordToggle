@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Word: Identifiable, Codable {
+struct ToggledWord: Identifiable, Codable {
 	var id: Int
 	let word: String
 	var highlighted: Bool
@@ -36,11 +36,11 @@ struct Word: Identifiable, Codable {
 	}
 }
 
-struct Sentence: Codable {
+struct ToggledWordSentence: Codable {
 	var sentence: String
-	var words: [Word]
+	var words: [ToggledWord]
 	
-	init(sentence: String, words: [Word]) {
+	init(sentence: String, words: [ToggledWord]) {
 		self.sentence = sentence
 		self.words = words
 	}
@@ -49,10 +49,10 @@ struct Sentence: Codable {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		sentence = try container.decode(String.self, forKey: .sentence)
 		var wordsArray = try container.nestedUnkeyedContainer(forKey: .words)
-		var words: [Word] = []
+		var words: [ToggledWord] = []
 		var index = 0
 		while !wordsArray.isAtEnd {
-			var word = try wordsArray.decode(Word.self)
+			var word = try wordsArray.decode(ToggledWord.self)
 			word.id = index
 			words.append(word)
 			index += 1
@@ -62,7 +62,7 @@ struct Sentence: Codable {
 }
 
 class SentenceViewModel: ObservableObject {
-	@Published var sentence: Sentence {
+	@Published var sentence: ToggledWordSentence {
 		didSet {
 			updateJSONString()
 		}
@@ -70,7 +70,7 @@ class SentenceViewModel: ObservableObject {
 	@Published var jsonString: String = ""
 	
 	init() {
-		self.sentence = Sentence(sentence: "", words: [])
+		self.sentence = ToggledWordSentence(sentence: "", words: [])
 		loadData()
 	}
 	
@@ -93,7 +93,7 @@ class SentenceViewModel: ObservableObject {
 		if let jsonData = jsonString.data(using: .utf8) {
 			do {
 				let decoder = JSONDecoder()
-				self.sentence = try decoder.decode(Sentence.self, from: jsonData)
+				self.sentence = try decoder.decode(ToggledWordSentence.self, from: jsonData)
 				updateJSONString()
 			} catch {
 				print("Error parsing JSON: \(error)")
@@ -101,7 +101,7 @@ class SentenceViewModel: ObservableObject {
 		}
 	}
 	
-	func toggleHighlight(for word: Word) {
+	func toggleHighlight(for word: ToggledWord) {
 		if let index = sentence.words.firstIndex(where: { $0.id == word.id }) {
 			sentence.words[index].highlighted.toggle()
 			updateJSONString()
