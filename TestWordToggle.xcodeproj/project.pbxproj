@@ -13,6 +13,9 @@
 		C81BCDD02C905A94007C5834 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C81BCDCF2C905A94007C5834 /* Preview Assets.xcassets */; };
 		C81BCDD22C905A94007C5834 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81BCDD12C905A94007C5834 /* Persistence.swift */; };
 		C81BCDD52C905A94007C5834 /* TestWordToggle.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C81BCDD32C905A94007C5834 /* TestWordToggle.xcdatamodeld */; };
+		C84C68892C9BE94500642E91 /* SentenceToWordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84C68882C9BE94500642E91 /* SentenceToWordsView.swift */; };
+		C84C688B2C9BEA5C00642E91 /* ToggleWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84C688A2C9BEA5C00642E91 /* ToggleWord.swift */; };
+		C84C688E2C9BEAB300642E91 /* SentenceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84C688D2C9BEAB300642E91 /* SentenceViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +26,9 @@
 		C81BCDCF2C905A94007C5834 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C81BCDD12C905A94007C5834 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		C81BCDD42C905A94007C5834 /* TestWordToggle.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestWordToggle.xcdatamodel; sourceTree = "<group>"; };
+		C84C68882C9BE94500642E91 /* SentenceToWordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceToWordsView.swift; sourceTree = "<group>"; };
+		C84C688A2C9BEA5C00642E91 /* ToggleWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleWord.swift; sourceTree = "<group>"; };
+		C84C688D2C9BEAB300642E91 /* SentenceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentenceViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +67,9 @@
 				C81BCDD12C905A94007C5834 /* Persistence.swift */,
 				C81BCDD32C905A94007C5834 /* TestWordToggle.xcdatamodeld */,
 				C81BCDCE2C905A94007C5834 /* Preview Content */,
+				C84C68882C9BE94500642E91 /* SentenceToWordsView.swift */,
+				C84C688A2C9BEA5C00642E91 /* ToggleWord.swift */,
+				C84C688D2C9BEAB300642E91 /* SentenceViewModel.swift */,
 			);
 			path = TestWordToggle;
 			sourceTree = "<group>";
@@ -147,6 +156,9 @@
 				C81BCDD52C905A94007C5834 /* TestWordToggle.xcdatamodeld in Sources */,
 				C81BCDCB2C905A93007C5834 /* ContentView.swift in Sources */,
 				C81BCDC92C905A93007C5834 /* TestWordToggleApp.swift in Sources */,
+				C84C68892C9BE94500642E91 /* SentenceToWordsView.swift in Sources */,
+				C84C688B2C9BEA5C00642E91 /* ToggleWord.swift in Sources */,
+				C84C688E2C9BEAB300642E91 /* SentenceViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

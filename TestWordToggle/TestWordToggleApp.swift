@@ -13,7 +13,7 @@ struct TestWordToggleApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+					SentenceToWordsView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

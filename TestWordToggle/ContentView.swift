@@ -5,123 +5,9 @@
 //  Created by Leonore Yardimli on 2024/9/10.
 //
 
+
 import SwiftUI
 
-struct ToggledWord: Identifiable, Codable {
-	var id: Int
-	let word: String
-	var highlighted: Bool
-	
-	enum CodingKeys: String, CodingKey {
-		case word, highlighted
-	}
-	
-	init(id: Int, word: String, highlighted: Bool) {
-		self.id = id
-		self.word = word
-		self.highlighted = highlighted
-	}
-	
-	init(from decoder: Decoder) throws {
-		let container = try decoder.container(keyedBy: CodingKeys.self)
-		word = try container.decode(String.self, forKey: .word)
-		highlighted = try container.decode(Bool.self, forKey: .highlighted)
-		id = 0 // This will be set correctly when decoding the whole array
-	}
-	
-	func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(word, forKey: .word)
-		try container.encode(highlighted, forKey: .highlighted)
-	}
-}
-
-struct ToggledWordSentence: Codable {
-	var sentence: String
-	var words: [ToggledWord]
-	
-	init(sentence: String, words: [ToggledWord]) {
-		self.sentence = sentence
-		self.words = words
-	}
-	
-	init(from decoder: Decoder) throws {
-		let container = try decoder.container(keyedBy: CodingKeys.self)
-		sentence = try container.decode(String.self, forKey: .sentence)
-		var wordsArray = try container.nestedUnkeyedContainer(forKey: .words)
-		var words: [ToggledWord] = []
-		var index = 0
-		while !wordsArray.isAtEnd {
-			var word = try wordsArray.decode(ToggledWord.self)
-			word.id = index
-			words.append(word)
-			index += 1
-		}
-		self.words = words
-	}
-}
-
-class SentenceViewModel: ObservableObject {
-	@Published var sentence: ToggledWordSentence {
-		didSet {
-			updateJSONString()
-		}
-	}
-	@Published var jsonString: String = ""
-	
-	init() {
-		self.sentence = ToggledWordSentence(sentence: "", words: [])
-		loadData()
-	}
-	
-	func loadData() {
-		let jsonString = """
-		 {
-		 "sentence":"We can go out for a walk now.",
-		 "words":[
-		 {"word":"We","highlighted":true},
-		 {"word":"can","highlighted":false},
-		 {"word":"go out","highlighted":true},
-		 {"word":"for","highlighted":false},
-		 {"word":"a","highlighted":false},
-		 {"word":"walk","highlighted":true},
-		 {"word":"now.","highlighted":true}
-		 ]
-		 }
-		 """
-		
-		if let jsonData = jsonString.data(using: .utf8) {
-			do {
-				let decoder = JSONDecoder()
-				self.sentence = try decoder.decode(ToggledWordSentence.self, from: jsonData)
-				updateJSONString()
-			} catch {
-				print("Error parsing JSON: \(error)")
-			}
-		}
-	}
-	
-	func toggleHighlight(for word: ToggledWord) {
-		if let index = sentence.words.firstIndex(where: { $0.id == word.id }) {
-			sentence.words[index].highlighted.toggle()
-			updateJSONString()
-		}
-	}
-	
-	private func updateJSONString() {
-		let encoder = JSONEncoder()
-		encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-		
-		do {
-			let jsonData = try encoder.encode(sentence)
-			if let jsonString = String(data: jsonData, encoding: .utf8) {
-				self.jsonString = jsonString
-			}
-		} catch {
-			print("Error encoding to JSON: \(error)")
-		}
-	}
-}
 
 struct ContentView: View {
 	@StateObject private var viewModel = SentenceViewModel()
@@ -141,7 +27,7 @@ struct ContentView: View {
 					.font(.headline)
 				
 				ScrollView {
-					Text(viewModel.jsonString)
+					Text(viewModel.userSentenceJson)
 						.font(.system(.body, design: .monospaced))
 						.padding()
 						.background(Color.gray.opacity(0.1))
@@ -167,7 +53,7 @@ struct ContentView: View {
 	private var attributedString: AttributedString {
 		var result = AttributedString()
 		
-		for (index, word) in viewModel.sentence.words.enumerated() {
+		for (index, word) in viewModel.userSentenceObj.words.enumerated() {
 			var attributedWord = AttributedString(word.word)
 			
 			// Apply bold if needed and set larger font size
@@ -198,7 +84,7 @@ struct ContentView: View {
 			attributedWord.link = URL(string: "word://\(index)")
 			
 			// Add more space after each word
-			if index < viewModel.sentence.words.count - 1 {
+			if index < viewModel.userSentenceObj.words.count - 1 {
 				attributedWord += AttributedString("   ") // Three spaces for more separation
 			}
 			
@@ -211,9 +97,9 @@ struct ContentView: View {
 	private func handleTap(_ url: URL) {
 		guard url.scheme == "word",
 					let index = Int(url.host ?? ""),
-					index < viewModel.sentence.words.count else { return }
+					index < viewModel.userSentenceObj.words.count else { return }
 		
-		viewModel.toggleHighlight(for: viewModel.sentence.words[index])
+		viewModel.toggleHighlight(for: viewModel.userSentenceObj.words[index])
 	}
 }
 
@@ -222,3 +108,7 @@ struct ContentView_Previews: PreviewProvider {
 		ContentView()
 	}
 }
+
+
+
+
