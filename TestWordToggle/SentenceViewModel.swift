@@ -8,63 +8,33 @@
 import Foundation
 
 class SentenceViewModel: ObservableObject {
-	@Published var userSentenceObj: ToggledWordSentence {
-		didSet {
-			updateJSONString()
-		}
-	}
-	@Published var userSentenceJson: String = ""
+	@Published var toggledSentence: ToggledWordSentence
 	
 	init() {
-		self.userSentenceObj = ToggledWordSentence(sentence: "", words: [])
-		loadData()
+		// Initialize with an empty sentence
+		self.toggledSentence = ToggledWordSentence(sentence: "", words: [])
 	}
 	
-	private func loadData() {
-		let jsonString = """
- {
- "sentence":"We can go out for a walk now.",
- "words":[
- {"word":"We","highlighted":true},
- {"word":"can","highlighted":false},
- {"word":"go out","highlighted":true},
- {"word":"for","highlighted":false},
- {"word":"a","highlighted":false},
- {"word":"walk","highlighted":true},
- {"word":"now.","highlighted":true}
- ]
- }
- """
+	func createToggledWordSentence(from sentence: String) {
+		// Split the sentence into an array of words
+		let wordsArray = sentence.components(separatedBy: .whitespacesAndNewlines)
+			.filter { !$0.isEmpty }
 		
-		if let jsonData = jsonString.data(using: .utf8) {
-			do {
-				let decoder = JSONDecoder()
-				self.userSentenceObj = try decoder.decode(ToggledWordSentence.self, from: jsonData)
-				updateJSONString()
-			} catch {
-				print("Error parsing JSON: \(error)")
-			}
+		// Create an array of ToggledWord structs
+		let toggledWords = wordsArray.enumerated().map { index, word in
+			ToggledWord(id: index, word: word, highlighted: false)
 		}
+		
+		// Create and set the ToggledWordSentence
+		toggledSentence = ToggledWordSentence(sentence: sentence, words: toggledWords)
 	}
 	
 	func toggleHighlight(for word: ToggledWord) {
-		if let index = userSentenceObj.words.firstIndex(where: { $0.id == word.id }) {
-			userSentenceObj.words[index].highlighted.toggle()
-			updateJSONString()
+		var words = toggledSentence.words
+		if let index = words.firstIndex(where: { $0.id == word.id }) {
+			words[index].highlighted.toggle()
+			toggledSentence.words = words
 		}
 	}
 	
-	private func updateJSONString() {
-		let encoder = JSONEncoder()
-		encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-		
-		do {
-			let jsonData = try encoder.encode(userSentenceObj)
-			if let jsonString = String(data: jsonData, encoding: .utf8) {
-				self.userSentenceJson = jsonString
-			}
-		} catch {
-			print("Error encoding to JSON: \(error)")
-		}
-	}
 }
